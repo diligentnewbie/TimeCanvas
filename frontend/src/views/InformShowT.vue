@@ -1,5 +1,5 @@
 <template>
-    <div class="primary">
+    <div class="travelLayout">
         <el-row class="tac">
             <el-col :span="4">
                 <el-menu class="scroll-container" default-active="2" @open="handleOpen" @close="handleClose">
@@ -174,7 +174,7 @@ export default {
 }
 </script>
 <style scoped>
-.primary {
+.travelLayout {
     height: 100vh;
 }
 .scroll-container {

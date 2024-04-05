@@ -92,13 +92,14 @@ export default {
     },
     mounted() {
         if (this.fetchData) {
-            axios.get(`/classmate/${this.$route.query.type}`)
-                .then(response => {
-                    // 处理成功响应
-                    console.log('响应成功！', response);
-                }).catch(error => {
-                    console.error('响应失败！', error);
-                });
+            // axios.get(`/classmate/${this.$route.query.type}`)
+            //     .then(response => {
+            //         // 处理成功响应
+            //         console.log('响应成功！', response);
+            //     }).catch(error => {
+            //         console.error('响应失败！', error);
+            //     });
+            console.log('需要后端接口');
         }else{
             console.log('不需要获取数据');
         }

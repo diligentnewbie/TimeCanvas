@@ -1,5 +1,5 @@
 <template>
-    <div class="primary">
+    <div class="InterestingeventLayout">
         <el-row class="tac">
             <el-col :span="4">
                 <el-menu class="scroll-container" default-active="2" @open="handleOpen" @close="handleClose">
@@ -117,7 +117,7 @@ export default {
     // 编辑事件
     update(item){
         this.$router.push({ 
-            path: '/趣事录/updateevent',
+            path: '/趣事录/updateinterestingevent',
             query: { id:item.id,name:item.name,type:item.events_album_name }
          });
         console.log('update:',item);
@@ -166,7 +166,7 @@ export default {
 }
 </script>
 <style scoped>
-.primary {
+.InterestingeventLayout {
     height: 100vh;
 }
 .scroll-container {

@@ -41,7 +41,7 @@ class Classmates(Base):
     dream = Column(String(200), nullable=True)#梦想
     graduation_message = Column(Text, nullable=True)#毕业寄语
     classmates_album_name = Column(String(50), nullable=True)#同学录相册名称
-    classmates_avatar_name = Column(String(50), nullable=True)#同学录头像路劲
+    classmates_avatar_name = Column(String(200), nullable=True)#同学录头像路劲
 
     baidu_uk = Column(String(15), ForeignKey("user.baidu_uk"))#外键，关联百度网盘用户
     user = relationship("User", back_populates="classmates")

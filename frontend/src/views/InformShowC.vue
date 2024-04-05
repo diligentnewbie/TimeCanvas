@@ -1,5 +1,5 @@
 <template>
-    <div class="primary">
+    <div class="classmateLayout">
         <el-row class="tac">
             <el-col :span="3">
                 <el-menu class="scroll-container" default-active="2" @open="handleOpen" @close="handleClose">
@@ -145,19 +145,20 @@ export default {
         const searchnamelist = ref(null);// 搜索姓名列表
         const router = useRouter(); // 获取路由实例
         const keyword = ref('');// 搜索关键字
-        onMounted(async () => {
+        const fetchClassmatesData = async () => {
             try {
-                /* 获取路由最后一个字段 */
                 const lastRoute = router.currentRoute.value.query.stage;
-                const response = await axios.get(`/classmate/${lastRoute}`); // 替换为实际用于搜索姓名的端点
-                classmatesData.value = response.data.classmates;// 获取同学列表数据
-                console.log('后端返回的同学列表:', classmatesData.value);
-                nameList.value = response.data.classmates.map(classmate => ({ name: classmate.name, id: classmate.id, classmates_album_name: classmate.classmates_album_name }));//得到姓名列表
-                console.log('同学列表:', nameList.value);
+                const response = await axios.get(`/classmate/${lastRoute}`);
+                classmatesData.value = response.data.classmates;
+                nameList.value = response.data.classmates.map(classmate => ({ name: classmate.name, id: classmate.id, classmates_album_name: classmate.classmates_album_name }));
+                if (classmatesData.value.length > 0) {
+                    selectedClassmate.value = classmatesData.value[0];
+                }
             } catch (error) {
-                console.error('匹配失败:', error);
+                console.error('获取同学数据失败:', error);
             }
-        });
+        };
+        onMounted(fetchClassmatesData);
         const search = async () => {
             try {
                 const lastRoute = router.currentRoute.value.query.stage;
@@ -172,6 +173,13 @@ export default {
                 console.error('搜索失败：', error);
             }
         };
+        const showSelectedClassmate = () => {
+            if (selectedClassmate.value) {
+                console.log('当前选中的同学:', selectedClassmate.value);
+            } else {
+                console.log('没有选中的同学');
+            }
+        };
         return {
             selectedClassmate,
             classmatesData,
@@ -181,13 +189,14 @@ export default {
             keyword,
             handleClose,
             handleOpen,
+            showSelectedClassmate,
         };
     },
 }
 </script>
 
 <style scoped>
-.primary {
+.classmateLayout {
     height: 100vh;
 }
 

@@ -10,7 +10,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import * as echarts from 'echarts';
-import china from 'echarts/map/china.json';
+import china from '../../public/china.json';
 import 'echarts-wordcloud';
 echarts.registerMap('china', china);
 

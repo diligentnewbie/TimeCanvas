@@ -5,7 +5,7 @@ import CreateInterestingEvent from "../views/CreateInterestingEvent.vue";
 import CreateTravel from "../views/CreateTravel.vue";
 /* 编辑 */
 import UpdateClassmate from '../views/UpdateClassmate.vue';
-// import UpdateInterestingEvent from "../views/UpdateInterestingEvent.vue";
+import UpdateInterestingEvent from "../views/UpdateInterestingEvent.vue";
 
 /* 404页面 */
 import NotFound from '../views/404.vue';
@@ -28,6 +28,7 @@ const routes = [
     {
         path: "/",
         component: MainLayout,
+        redirect: "/about",
         children: [
             {
                 path: "/about",
@@ -137,6 +138,10 @@ const routes = [
                         name:"CreateInterestingEvent",
                         component:CreateInterestingEvent,
                     },
+                    {
+                        path:"updateinterestingevent",
+                        component:UpdateInterestingEvent,
+                    },
                 ],
             },
             {
@@ -151,6 +156,10 @@ const routes = [
                         name:"CreateTravel",
                         component:CreateTravel,
                     },
+                    // {
+                    //     path:'updatetravle',
+                    //     component:
+                    // },
                 ],
             },
         ],

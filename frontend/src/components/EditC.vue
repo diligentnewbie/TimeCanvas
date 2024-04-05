@@ -72,11 +72,9 @@
                         <label for="dream">梦想:</label>
                         <textarea id="dream" v-model="formData.dream" required></textarea>
                     </div>
-                    <div class="biyejiyu">
+                    <div class="biyejiyu" @mouseup="showPopup">
                         <label for="graduation_message">毕业寄语:</label>
                         <textarea id="graduation_message" v-model="formData.graduation_message" required></textarea>
-                        <button @click="getai">AI</button>
-                        <!-- <div id="editor"></div> -->
                     </div>
                 </div>
                 <div class="button">
@@ -87,11 +85,17 @@
             </el-page-header>
         </div>
     </div>
+    <el-dialog v-model="dialogVisible" title="可AI生成的毕业寄语" width="90%"
+    style="background-image: linear-gradient(to right top, #4db2d8, #2bbad5, #00c0cd, #02c6c0, #32cbae);"
+    :before-close="handleClose">
+    <GMDialog @update-vditortext="updateVditorText"/>
+  </el-dialog>
 </template>
 
 <script>
 import axios from 'axios';
 import { ElMessageBox } from 'element-plus';
+import GMDialog from './GMDialog.vue';
 export default {
     data() {
         return {
@@ -111,14 +115,18 @@ export default {
                 dream: '',
                 graduation_message: '',
             },
-            avatarPreview: '',
+            avatarPreview: '',//头像预览
             name: '',//主题姓名
             type: '',//主题类型
             id: '',//主题id
-            editor: null,
+            dialogVisible: false, //弹窗
         };
 
     },
+    components: {
+        GMDialog,
+    },
+    emits: ['formSubmit', 'formReset'],
     watch: {
         '$route.query.name': {
             immediate: true,
@@ -200,28 +208,23 @@ export default {
                 graduation_message: ''
             };
         },
-        async getai() {
-            console.log('编辑器里的graduation_message:', this.formData.graduation_message);
-            axios.get('/xunfei/semantic/textcreat', {
-                params: {
-                    text: JSON.stringify(this.formData.graduation_message),
-                }
-            }).then(response => {
-                // 处理成功响应
-                if (response.status == 200) {
-                    this.formData.graduation_message = response.data;
-                    console.log('返回的数据：', response.data);
-                } else {
-                    console.log('AI生成失败！');
-                }
-            }).catch(error => {
-                // 处理错误响应
-                console.error('哦豁，后端问题:', error);
-            });
-
-        },
         onBack(){
             this.$router.push({path:'/同学录/informshow',query:{stage:this.type}});
+        },
+        //弹窗
+        showPopup() {
+            this.dialogVisible = true;
+        },
+        handleClose(done) {
+            this.$confirm('确认完成毕业寄语吗？')
+              .then(_ => {
+                done();
+              })
+              .catch(_ => {});
+          },
+        //
+        updateVditorText(newText){
+            this.formData.graduation_message = newText;//更新毕业寄语
         },
     },
     props: {
@@ -257,39 +260,6 @@ export default {
         } else {
             this.formData.classmates_album_name = this.$route.query.type;
         }
-        // 在此配置EditorJS实例
-        // this.editor = new EditorJS({
-        //     holder: 'editor', // 指定初始化Editor的容器ID
-        //     autofocus: true,
-        //     tools: {
-        //         paragraph: {
-        //             class: paragraph,//指定工具的类
-        //             inlineToolbar: true,//是否显示行内工具栏
-        //         }
-        //     },
-        //     onChange: () => {
-        //         // 当编辑器内容发生变化时触发
-        //         this.editor.save().then((outputData) => {
-        //             // 将编辑器内容保存到数据库
-        //             // this.formData.graduation_message = JSON.stringify(outputData);
-        //             console.log(outputData);
-        //             outputData.blocks.forEach((block) => {
-        //                 console.log('text', block.data.text);
-        //                 this.formData.graduation_message = block.data.text;
-        //                 console.log('graduation_message', this.formData.graduation_message);
-        //             });
-        //             console.log('保存成功', this.formData.graduation_message);
-        //         }).catch((error) => {
-        //             // 处理保存错误
-        //             console.error('保存错误', error);
-        //         });
-        //     },
-        // });
-    },
-    beforeDestroy() {
-        if (this.editor) {
-            this.editor.destroy();
-        }
     },
 };
 </script>
@@ -323,18 +293,6 @@ export default {
 .avatar {
     grid-row: span 5;
 }
-
-#editor {
-    width: 100%;
-    height: 200px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background: rgba(255, 255, 255, 0.2);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-    box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.2);
-}
-
 .hobby textarea,
 .mengxiang textarea,
 .biyejiyu textarea {
